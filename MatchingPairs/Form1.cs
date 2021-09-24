@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace MatchingPairs
@@ -43,7 +44,14 @@ namespace MatchingPairs
 
         private void label_click(object sender, EventArgs e)
         {
+            Label clickedLabel = sender as Label;
+            if (clickedLabel != null)
+            {
+                if (clickedLabel.ForeColor == Color.Black) 
+                    return;
 
+                clickedLabel.ForeColor = Color.Black;
+            }
         }
     }
 }
