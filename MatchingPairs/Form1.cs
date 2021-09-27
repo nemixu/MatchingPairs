@@ -7,11 +7,14 @@ namespace MatchingPairs
 {
     public partial class Form1 : Form
     {
+        // assigning the Label field to null
         private Label firstClicked = null;
         private Label secondClicked = null;
 
+        // new instance of the random method.
         Random random = new Random();
 
+        // list of strings to be used as the icons
         private List<string> icons = new List<string>()
         {
             "!", "!", "N", "N", ",", ",", "k", "k",
@@ -19,12 +22,15 @@ namespace MatchingPairs
 
         };
 
+        //initialize the components and call the icons
         public Form1()
         {
             InitializeComponent();
             AssignIconsToSquares();
         }
 
+        // assign icons to each square 
+        // randomly assign the icon to an available square.
         private void AssignIconsToSquares()
         {
             foreach (Control control in tableLayoutPanel1.Controls)
@@ -57,7 +63,7 @@ namespace MatchingPairs
                 if (clickedLabel.ForeColor == Color.Black) 
                     return;
 
-                //clickedLabel.ForeColor = Color.Black;
+                
                 if (firstClicked == null)
                 {
                     firstClicked = clickedLabel;
@@ -69,10 +75,22 @@ namespace MatchingPairs
                 secondClicked = clickedLabel;
                 secondClicked.ForeColor = Color.Black;
 
+                CheckForWinner();
+
+                //resets the label once matched, timer is skipped
+                if (firstClicked.Text == secondClicked.Text)
+                {
+                    firstClicked = null;
+                    secondClicked = null;
+                    return;
+                }
+                // timer to countdown and reset the tiles to blank if a user gets no match
                 timer1.Start();
             }
         }
 
+        //timer object handler 
+        //adjusts the color of the tiles to black to show the icons
         private void timer1_Tick(object sender, EventArgs e)
         {
             timer1.Stop();
@@ -80,6 +98,23 @@ namespace MatchingPairs
             secondClicked.ForeColor = secondClicked.BackColor;
             firstClicked = null;
             secondClicked = null;
+        }
+
+        private void CheckForWinner()
+        {
+            foreach (Control control in tableLayoutPanel1.Controls)
+            {
+                Label iconLabel = control as Label;
+
+                if (iconLabel != null)
+                {
+                    if (iconLabel.ForeColor == iconLabel.BackColor)
+                        return;
+                }
+            }
+
+            MessageBox.Show("You matched all the icons!", "Congratulations and well done!");
+            Close();
         }
     }
 }
